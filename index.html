@@ -6,7 +6,13 @@
     <title>Gaza - Every Confirmed Death Since Oct 7th 2023</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative; 
+            background-color: #111827; /* bg-gray-900 */
+        }
         .victim-item {
             opacity: 0;
             transform: translateY(-20px); 
@@ -20,15 +26,16 @@
             transition: opacity 0.5s ease-in-out;
             opacity: 0; display: none;
             position: fixed; bottom: 10px; left: 50%;
-            transform: translateX(-50%); z-index: 1000; 
+            transform: translateX(-50%); z-index: 1050; 
         }
         
         #victims-area {
             position: relative; 
             overflow: hidden; 
+            z-index: 1; 
         }
 
-        #victims-area::before { /* Top fade */
+        #victims-area::before { 
             content: '';
             position: absolute;
             top: 0;
@@ -41,7 +48,7 @@
             pointer-events: none; 
         }
 
-        #victims-area::after { /* Bottom fade */
+        #victims-area::after { 
             content: '';
             position: absolute;
             bottom: 0;
@@ -54,89 +61,333 @@
             pointer-events: none;
         }
 
-        /* Updated Sticker Styles - initially hidden */
-        #stats-sticker {
+        /* Animated Background Styles */
+        #parallax-background {
             position: fixed;
-            top: 50%;
-            right: 20px; 
-            transform: translateY(-50%);
-            background-color: rgba(248, 113, 113, 0.9); 
-            color: #FFFFFF; 
-            width: 160px;  
-            height: 160px; 
-            border-radius: 50%; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4); 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; 
+            overflow: hidden; 
+            z-index: -1; 
+            filter: grayscale(20%); 
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            background-repeat: no-repeat; 
+            background-size: cover; 
+            background-position: center center;
+            transform-origin: center center; 
+            will-change: transform, filter; 
+            transform: scale(1.03); 
+        }
+
+        #parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.15); 
+            z-index: 1; 
+            pointer-events: none; 
+        }
+
+
+        @keyframes subtleZoomInOut {
+            0% {
+                transform: scale(1.03); 
+            }
+            100% {
+                transform: scale(1.06); 
+            }
+        }
+
+        #parallax-layer-1 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%206.svg');
+            animation: subtleZoomInOut 50s ease-in-out infinite alternate; 
+            filter: blur(1.25px); 
+        } 
+        #parallax-layer-2 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%205.svg');
+            animation: subtleZoomInOut 44s ease-in-out infinite alternate; 
+            filter: blur(1.0px);   
+        }
+        #parallax-layer-3 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%204.svg');
+            animation: subtleZoomInOut 38s ease-in-out infinite alternate; 
+            filter: blur(0.75px); 
+        }
+        #parallax-layer-4 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%203.svg');
+            animation: subtleZoomInOut 32s ease-in-out infinite alternate; 
+            filter: blur(0.5px);   
+        }
+        #parallax-layer-5 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%202.svg');
+            animation: subtleZoomInOut 26s ease-in-out infinite alternate; 
+            filter: blur(0.35px); 
+        }
+        #parallax-layer-6 { 
+            background-image: url('https://raw.githubusercontent.com/mattsdevstuff/Gaza-Casualty-Names/main/Layer%201.svg');
+            animation: subtleZoomInOut 20s ease-in-out infinite alternate; 
+            filter: blur(0.25px); 
+        }
+        header { 
+            position: relative;
+            z-index: 20; 
+        }
+
+        /* Floating Action Button Styles */
+        .fab-button {
+            position: fixed;
+            background-color: #4A5568; /* bg-gray-600 */
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             z-index: 1000;
-            display: none;  /* Changed to none to hide it by default */
-            align-items: center; 
-            justify-content: center; 
-            text-align: center;
-            font-size: 0.875rem; 
-            font-weight: bold; 
-            border: 2px solid rgba(239, 68, 68, 0.9); 
-            padding: 10px; 
-            box-sizing: border-box; 
+            transition: background-color 0.2s;
         }
-        #sticker-text-content {
+        .fab-button:hover {
+            background-color: #2D3748; /* bg-gray-700 */
+        }
+        .fab-button svg {
+            width: 24px;
+            height: 24px;
+        }
+        #embed-button {
+            bottom: 20px;
+            right: 20px;
+        }
+        #download-button {
+            bottom: 80px; /* Position above embed button */
+            right: 20px;
+            background-color: #38A169; /* Green for download */
+        }
+        #download-button:hover {
+            background-color: #2F855A; /* Darker green */
+        }
+
+
+        /* Modal Styles (Shared for Embed and Download) */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .modal-content {
+            background-color: #2D3748; /* bg-gray-700 */
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 600px;
+            color: #E2E8F0; /* text-gray-200 */
+        }
+        .modal-content h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 16px;
+        }
+        .modal-content textarea {
+            width: 100%;
+            min-height: 150px; 
+            background-color: #1A202C; /* bg-gray-800 */
+            color: #CBD5E0; /* text-gray-300 */
+            border: 1px solid #4A5568; /* border-gray-600 */
+            border-radius: 6px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+        .modal-buttons {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .modal-button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500; /* font-medium */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-button-primary {
+            background-color: #3B82F6; /* bg-blue-500 */
+            color: white;
+        }
+        .modal-button-primary:hover {
+            background-color: #2563EB; /* bg-blue-600 */
+        }
+         .modal-button-download { 
+            background-color: #38A169; /* Green */
+            color: white;
+        }
+        .modal-button-download:hover {
+            background-color: #2F855A; /* Darker green */
+        }
+        .modal-button-secondary {
+            background-color: #4A5568; /* bg-gray-600 */
+            color: white;
+        }
+        .modal-button-secondary:hover {
+            background-color: #2D3748; /* bg-gray-700 */
+        }
+        .modal-instructions {
+            font-size: 0.875rem; /* text-sm */
+            color: #A0AEC0; /* text-gray-400 */
+            margin-bottom: 12px;
+        }
+        .modal-instructions ol {
+            list-style-type: decimal;
+            margin-left: 20px;
+        }
+        .modal-instructions li {
+            margin-bottom: 6px;
+        }
+
+        /* Page Load Fade-in Overlay */
+        #page-load-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000; /* Black */
             opacity: 1;
-            transition: opacity 1.0s ease-in-out; 
-            max-width: 90%; 
+            z-index: 100000; /* Highest z-index */
+            pointer-events: all; 
+            transition: opacity 2.5s ease-out; 
         }
-        #sticker-text-content.fading-out {
+        #page-load-overlay.fade-out {
             opacity: 0;
+            pointer-events: none; 
         }
+
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 flex flex-col items-center min-h-screen p-2 sm:p-4">
-    <div id="app-container" class="w-full max-w-3xl mx-auto flex flex-col h-full flex-grow">
+<body class="bg-gray-900 text-gray-100 flex flex-col items-center min-h-screen">
+    <div id="page-load-overlay"></div> 
+
+    <div id="parallax-background">
+        <div class="parallax-layer" id="parallax-layer-1"></div>
+        <div class="parallax-layer" id="parallax-layer-2"></div>
+        <div class="parallax-layer" id="parallax-layer-3"></div>
+        <div class="parallax-layer" id="parallax-layer-4"></div>
+        <div class="parallax-layer" id="parallax-layer-5"></div>
+        <div class="parallax-layer" id="parallax-layer-6"></div>
+        <div id="parallax-overlay"></div> 
+    </div>
+
+    <div id="app-container" class="w-full max-w-3xl mx-auto flex flex-col h-full flex-grow relative z-10 p-2 sm:p-4">
         <header class="text-center py-4 sm:py-6">
-            <h1 class="text-3xl sm:text-4xl font-bold text-red-400">Gaza - Every Confirmed Death Since Oct 7th 2023</h1>
+            <h1 class="text-5xl sm:text-6xl font-bold text-white filter drop-shadow">KILLED IN GAZA</h1>
+            <p class="text-xl sm:text-2xl text-white font-bold mt-1 filter drop-shadow-sm">since October 7th 2023</p>
         </header>
 
-        <div id="loading-indicator" class="text-center py-10 flex-grow flex flex-col justify-center items-center">
-            <p id="loading-text" class="text-lg sm:text-xl sr-only">Loading live data, please wait...</p> 
+        <div id="loading-indicator" class="text-center p-6 bg-slate-700 border border-slate-600 rounded-lg shadow-xl flex flex-col justify-center items-center my-auto">
+            <p id="loading-text" class="text-lg sm:text-xl text-gray-100">Loading names...</p> 
             <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-t-2 border-gray-100 mx-auto mt-4"></div>
         </div>
 
-    
-        <main id="victims-area" class="flex-grow p-3 sm:p-6 rounded-lg h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] min-h-[250px] sm:min-h-[300px]" style="display:none;">
+        <main id="victims-area" class="flex-grow p-3 sm:p-6 rounded-lg bg-slate-700 border border-slate-600 shadow-xl h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] min-h-[250px] sm:min-h-[300px]" style="display:none;">
             <ul id="victim-list" class="space-y-3"></ul>
         </main>
 
         <div id="message-box-container"></div>
-
        
-        <footer id="app-footer" class="mt-8 pt-6 pb-4 text-center text-xs text-gray-500 border-t border-gray-700">
-            <p>Data sourced from <a href="https://data.techforpalestine.org/docs/api/killed-in-gaza" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">Tech For Palestine - Killed in Gaza API</a>.</p>
+        <footer id="app-footer" class="mt-6 pt-3 pb-4 text-center text-xs text-gray-300"> 
+            <div class="footer-content-wrapper inline-block p-3 bg-slate-700 rounded-lg shadow-md border border-slate-600"> 
+                <p>Data sourced from <a href="https://data.techforpalestine.org/docs/killed-in-gaza/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">Tech For Palestine - Killed in Gaza API</a>.</p>
+            </div>
         </footer>
     </div>
 
-    
-    <div id="stats-sticker"> 
-        <p id="sticker-text-content">Loading stats...</p>
+    {/* Embed Button */}
+    <button id="embed-button" class="fab-button" title="Embed Widget">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+        </svg>          
+    </button>
+
+    {/* Download Button */}
+    <button id="download-button" class="fab-button" title="Download for Offline Use">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+    </button>
+
+    {/* Embed Modal */}
+    <div id="embed-modal-backdrop" class="modal-backdrop">
+        <div id="embed-modal-content" class="modal-content"> 
+            <h3>Embed This Memorial Stream</h3>
+            <p class="modal-instructions">Copy and paste the code below to embed a lite version of this stream on your website.</p>
+            <textarea id="embed-code-textarea" readonly></textarea>
+            <div class="modal-buttons">
+                <button id="copy-embed-code-button" class="modal-button modal-button-primary">Copy Code</button>
+                <button id="close-embed-modal-button" class="modal-button modal-button-secondary">Close</button>
+            </div>
+        </div>
     </div>
 
+    {/* Download Modal */}
+    <div id="download-modal-backdrop" class="modal-backdrop">
+        <div id="download-modal-content" class="modal-content"> 
+            <h3>Download for Offline Use</h3>
+            <div class="modal-instructions">
+                <p>To use this application offline:</p>
+                <ol>
+                    <li>Click the "Download App File" button below.</li>
+                    <li>Your browser will download an HTML file (e.g., <code>gaza_memorial_offline.html</code>).</li>
+                    <li>Save this file to your computer.</li>
+                    <li>To run the app offline, find the saved HTML file and open it with your web browser (e.g., by double-clicking it).</li>
+                </ol>
+                <p class="mt-3"><strong>Note:</strong> The offline version will display data from the last time it was able to fetch it while online. It will not update with new data until you open an online version again.</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="download-app-file-button" class="modal-button modal-button-download">Download App File</button>
+                <button id="close-download-modal-button" class="modal-button modal-button-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        console.log("Script started (Live Data - Batched Page Loading - With Stats Sticker Hidden).");
+        console.log("Script started (Live Data - With Embed & Download Feature - Syntax Fix).");
         
         let allVictimsFlatList = []; 
         let overallVictimIndex = 0;  
-        
         const normalItemAddIntervalMs = 2500; 
         const fastItemAddIntervalMs = 300;   
         let currentItemAddIntervalMs = normalItemAddIntervalMs; 
-
         const normalScrollSpeedPxPerSecond = 20; 
         const fastScrollSpeedPxPerSecond = 100; 
-        
         let currentTranslationY = 0; 
         let lastTimestamp = 0;       
-
         let itemAddTimeoutId = null; 
         let animationFrameId = null; 
         let isDataLoaded = false;
         let isSpaceBarDown = false; 
-
         const PAGES_PER_BATCH = 200; 
         const BACKGROUND_FETCH_THRESHOLD = 20; 
         let nextBatchToFetch_HighestPage = 0; 
@@ -148,108 +399,104 @@
         const victimListUl = document.getElementById('victim-list');
         const messageBoxContainer = document.getElementById('message-box-container');
         const appFooter = document.getElementById('app-footer'); 
-        const statsSticker = document.getElementById('stats-sticker');
-        const stickerTextContent = document.getElementById('sticker-text-content');
+        const pageLoadOverlay = document.getElementById('page-load-overlay');
+        
+        const embedButton = document.getElementById('embed-button');
+        const embedModalBackdrop = document.getElementById('embed-modal-backdrop');
+        const embedCodeTextarea = document.getElementById('embed-code-textarea');
+        const copyEmbedCodeButton = document.getElementById('copy-embed-code-button');
+        const closeEmbedModalButton = document.getElementById('close-embed-modal-button');
 
-        let stickerStats = [];
-        let currentStickerStatIndex = 0;
-        let stickerIntervalId = null;
+        const downloadButton = document.getElementById('download-button');
+        const downloadModalBackdrop = document.getElementById('download-modal-backdrop');
+        const downloadAppFileButton = document.getElementById('download-app-file-button');
+        const closeDownloadModalButton = document.getElementById('close-download-modal-button');
+
 
         window.addEventListener('DOMContentLoaded', () => {
             console.log("DOMContentLoaded event fired.");
-            if (loadingText) loadingText.textContent = ""; 
+            if (loadingText) loadingText.textContent = "Loading names..."; 
+            
+            if (pageLoadOverlay) {
+                setTimeout(() => {
+                    pageLoadOverlay.classList.add('fade-out');
+                    setTimeout(() => { pageLoadOverlay.style.display = 'none'; }, 2500); 
+                }, 500); 
+            }
+
             setupEventListeners();
             fetchAndDisplayInitialData(); 
-            fetchAndUpdateTimestampAndSticker(); 
+            fetchAndUpdateTimestamp(); 
         });
 
         function setupEventListeners() {
             document.addEventListener('keydown', handleKeyDown);
             document.addEventListener('keyup', handleKeyUp);
-        }
 
-        async function fetchAndUpdateTimestampAndSticker() {
+            if (embedButton) embedButton.addEventListener('click', openEmbedModal);
+            if (closeEmbedModalButton) closeEmbedModalButton.addEventListener('click', closeEmbedModal);
+            if (embedModalBackdrop) {
+                embedModalBackdrop.addEventListener('click', (event) => {
+                    if (event.target === embedModalBackdrop) closeEmbedModal();
+                });
+            }
+            if (copyEmbedCodeButton) copyEmbedCodeButton.addEventListener('click', copyEmbedCode);
+            
+            if (downloadButton) downloadButton.addEventListener('click', openDownloadModal);
+            if (closeDownloadModalButton) closeDownloadModalButton.addEventListener('click', closeDownloadModal);
+            if (downloadModalBackdrop) {
+                downloadModalBackdrop.addEventListener('click', (event) => {
+                    if (event.target === downloadModalBackdrop) closeDownloadModal();
+                });
+            }
+            if (downloadAppFileButton) downloadAppFileButton.addEventListener('click', downloadAppFile);
+        }
+        
+        async function fetchAndUpdateTimestamp() { 
             const summaryApiUrl = 'https://data.techforpalestine.org/api/v3/summary.json';
-            console.log(`fetchAndUpdateTimestampAndSticker: Fetching from ${summaryApiUrl}`);
+            console.log(`fetchAndUpdateTimestamp: Fetching from ${summaryApiUrl}`);
             let updateText = "Data last updated: Could not retrieve."; 
 
             try {
                 const response = await fetch(summaryApiUrl);
                 if (response.ok) {
                     const summaryData = await response.json();
-                    
                     if (summaryData && summaryData.gaza && summaryData.gaza.last_update && String(summaryData.gaza.last_update).trim() !== "") {
                         updateText = `Data last updated: ${summaryData.gaza.last_update}`;
                     } else {
                         updateText = "Data last updated: Timestamp not available in API response.";
-                        console.warn("fetchAndUpdateTimestampAndSticker: 'gaza.last_update' field not found or is empty.");
+                        console.warn("fetchAndUpdateTimestamp: 'gaza.last_update' field not found or is empty.");
                     }
-
-                    // Sticker data is still prepared, but the sticker itself is hidden by CSS
-                    if (summaryData && summaryData.gaza) {
-                        const gazaData = summaryData.gaza;
-                        stickerStats = [
-                            { label: "Total confirmed deaths", value: gazaData.killed?.total },
-                            { label: "Total child deaths", value: gazaData.killed?.children },
-                            { label: "Total medic deaths", value: gazaData.killed?.medical },
-                            { label: "Total journalist deaths", value: gazaData.killed?.press },
-                            { label: "Total confirmed injuries", value: gazaData.injured?.total }
-                        ];
-                        // No need to change statsSticker.style.display here if it's hidden by default in CSS
-                        startStickerCycle(); 
-                    } else {
-                         if (stickerTextContent) stickerTextContent.textContent = "Stats not available.";
-                         console.warn("fetchAndUpdateTimestampAndSticker: 'gaza' object not found in summary data for sticker.");
-                    }
-
                 } else {
                     updateText = `Data last updated: API error (Status ${response.status}).`;
-                    if (stickerTextContent) stickerTextContent.textContent = "Stats API error.";
-                    console.error(`fetchAndUpdateTimestampAndSticker: HTTP error! Status: ${response.status}`);
+                    console.error(`fetchAndUpdateTimestamp: HTTP error! Status: ${response.status}`);
                 }
             } catch (error) {
-                console.error("fetchAndUpdateTimestampAndSticker: Error fetching or parsing summary data:", error);
-                if (stickerTextContent) stickerTextContent.textContent = "Error loading stats.";
+                console.error("fetchAndUpdateTimestamp: Error fetching or parsing summary data:", error);
             }
 
             if (appFooter) {
-                let lastUpdateP = appFooter.querySelector('.data-last-updated-text');
-                if (!lastUpdateP) { 
-                    lastUpdateP = document.createElement('p');
-                    lastUpdateP.className = 'mt-1 data-last-updated-text'; 
-                    appFooter.appendChild(lastUpdateP);
+                const footerContentWrapper = appFooter.querySelector('.footer-content-wrapper');
+                if (footerContentWrapper) {
+                    let lastUpdateP = footerContentWrapper.querySelector('.data-last-updated-text');
+                    if (!lastUpdateP) { 
+                        lastUpdateP = document.createElement('p');
+                        lastUpdateP.className = 'mt-1 data-last-updated-text font-bold'; 
+                        footerContentWrapper.appendChild(lastUpdateP);
+                    }
+                    lastUpdateP.textContent = updateText;
+                } else {
+                    let lastUpdateP = appFooter.querySelector('.data-last-updated-text');
+                     if (!lastUpdateP) {
+                        lastUpdateP = document.createElement('p');
+                        lastUpdateP.className = 'mt-1 data-last-updated-text font-bold';
+                        appFooter.appendChild(lastUpdateP);
+                    }
+                    lastUpdateP.textContent = updateText;
+                    console.error("Footer content wrapper not found, appended 'last updated' to footer directly.");
                 }
-                lastUpdateP.textContent = updateText;
             }
         }
-
-        function startStickerCycle() {
-            if (stickerIntervalId) clearInterval(stickerIntervalId);
-            if (stickerStats.length === 0) return;
-
-            // Update text content even if sticker is hidden, so it's ready if shown later
-            updateStickerText(); 
-            currentStickerStatIndex = (currentStickerStatIndex + 1) % stickerStats.length; 
-
-            stickerIntervalId = setInterval(() => {
-                if (stickerTextContent) { // Check if element exists
-                    stickerTextContent.classList.add('fading-out');
-                    setTimeout(() => {
-                        updateStickerText();
-                        stickerTextContent.classList.remove('fading-out');
-                        currentStickerStatIndex = (currentStickerStatIndex + 1) % stickerStats.length;
-                    }, 1000); 
-                }
-            }, 6000); 
-        }
-
-        function updateStickerText() {
-            if (!stickerTextContent || stickerStats.length === 0) return;
-            const stat = stickerStats[currentStickerStatIndex];
-            const value = (stat.value !== null && stat.value !== undefined) ? Number(stat.value).toLocaleString() : "N/A";
-            stickerTextContent.textContent = `${stat.label}: ${value}`;
-        }
-
 
         function handleKeyDown(event) {
             if (event.key === ' ' || event.code === 'Space') {
@@ -258,7 +505,7 @@
                 if (!isSpaceBarDown) { 
                     isSpaceBarDown = true;
                     currentItemAddIntervalMs = fastItemAddIntervalMs;
-                    showAppMessage("Speed increased", "info", 1000);
+                    console.log("Space bar down: Speed increased.");
                     if (itemAddTimeoutId) {
                         clearTimeout(itemAddTimeoutId);
                         if (overallVictimIndex < allVictimsFlatList.length) {
@@ -278,7 +525,7 @@
                 if (isSpaceBarDown) { 
                     isSpaceBarDown = false;
                     currentItemAddIntervalMs = normalItemAddIntervalMs;
-                    showAppMessage("Speed returned to normal", "info", 1000);
+                    console.log("Space bar up: Speed returned to normal.");
                     if (itemAddTimeoutId) { 
                         clearTimeout(itemAddTimeoutId);
                         itemAddTimeoutId = setTimeout(() => scheduleNextVictimAddition(false), currentItemAddIntervalMs);
@@ -294,13 +541,14 @@
             }
         }
 
+        // Main app's data fetching functions
         async function determineTotalPages() {
             let low = 1;
             let high = 1000; 
             let lastKnownGoodPage = 0;
             const baseApiUrl = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
             console.log(`determineTotalPages: Starting binary search for total pages between ${low} and ${high}.`);
-
+            if(loadingText) loadingText.textContent = "Determining total pages...";
             while (low <= high) {
                 let mid = Math.floor(low + (high - low) / 2); 
                 if (mid === 0) mid = 1;
@@ -328,6 +576,7 @@
         async function fetchSinglePageData(pageNumber) {
             const apiUrl = `https://data.techforpalestine.org/api/v2/killed-in-gaza/page-${pageNumber}.json`;
             console.log(`fetchSinglePageData: Fetching from ${apiUrl}`);
+            if(loadingText) loadingText.textContent = `Loading names (page ${pageNumber})...`;
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
@@ -359,7 +608,7 @@
             let batchDataAccumulator = []; 
             console.log(`tryFetchAndProcessBatch: Attempting to fetch batch of pages from ${startPageForThisBatch} to ${currentBatchTargetHighestPage}.`);
             for (let p = currentBatchTargetHighestPage; p >= startPageForThisBatch; p--) {
-                const pageContent = await fetchSinglePageData(p);
+                const pageContent = await fetchSinglePageData(p); 
                 if (pageContent) batchDataAccumulator.push(...pageContent);
                 else console.warn(`tryFetchAndProcessBatch: Failed to fetch or got empty data for page ${p} within batch.`);
             }
@@ -379,16 +628,18 @@
         async function fetchAndDisplayInitialData() {
             console.log("fetchAndDisplayInitialData: Starting.");
             loadingIndicator.style.display = 'flex'; 
-            if (loadingText) loadingText.textContent = ""; 
+            if (loadingText) loadingText.textContent = "Loading names..."; 
             victimsArea.style.display = 'none';
             clearAppMessage();
-            const totalPages = await determineTotalPages();
+            const totalPages = await determineTotalPages(); 
             if (totalPages <= 0) {
                 showAppMessage("Could not determine API page count or no data available.", "error", 7000);
                 loadingIndicator.style.display = 'none'; return;
             }
             nextBatchToFetch_HighestPage = totalPages; 
-            const initialBatchSuccess = await tryFetchAndProcessBatch();
+            const initialBatchSuccess = await tryFetchAndProcessBatch(); 
+            if (loadingText) loadingText.textContent = "Processing data...";
+            
             loadingIndicator.style.display = 'none'; 
             if (initialBatchSuccess && allVictimsFlatList.length > 0) {
                 isDataLoaded = true;
@@ -407,7 +658,15 @@
             const itemsRemainingInQueue = allVictimsFlatList.length - overallVictimIndex;
             if (isDataLoaded && !isFetchingNextBatch && itemsRemainingInQueue < BACKGROUND_FETCH_THRESHOLD && overallVictimIndex > 0 && nextBatchToFetch_HighestPage >= 1 ) {
                 console.log(`Nearing end of current data buffer. Attempting to fetch next batch (pages ending around ${nextBatchToFetch_HighestPage}).`);
-                tryFetchAndProcessBatch(); 
+                if(loadingText && loadingIndicator.style.display === 'none') { 
+                    loadingText.textContent = "Loading more names...";
+                    loadingIndicator.style.display = 'flex'; 
+                }
+                tryFetchAndProcessBatch().then(success => {
+                    if (loadingIndicator.style.display === 'flex' && loadingText.textContent === "Loading more names...") { 
+                        loadingIndicator.style.display = 'none'; 
+                    }
+                }); 
             }
             if (overallVictimIndex < allVictimsFlatList.length) {
                 const victim = allVictimsFlatList[overallVictimIndex];
@@ -455,7 +714,7 @@
 
         function displayVictim(victim) {
             const li = document.createElement('li');
-            li.className = 'victim-item p-3 bg-gray-700 rounded-md shadow'; 
+            li.className = 'victim-item p-3 bg-slate-800 rounded-md shadow'; 
             const enName = victim.en_name || "";
             const arName = victim.name || "";
             let combinedNameStr = "";
@@ -496,6 +755,513 @@
             victimListUl.style.transform = `translateY(${currentTranslationY}px)`;
             requestAnimationFrame(() => { requestAnimationFrame(() => { li.classList.add('revealed'); }); });
         }
+
+        // --- Embed Modal Logic ---
+        function generateEmbedCode() {
+            const widgetHtml = `
+<div id="gaza-memorial-widget-container" style="width: 300px; height: 400px; border: 1px solid #475569; /* slate-600 */ border-radius: 8px; background-color: #334155; /* slate-700 */ color: #D1D5DB; font-family: Arial, sans-serif; overflow: hidden; position: relative;">
+    <div style="text-align: center; padding: 10px 5px; border-bottom: 1px solid #475569;">
+      <h3 style="color: #FFFFFF; font-size: 1.2rem; font-weight: bold; margin:0 0 2px 0;">KILLED IN GAZA</h3>
+      <p style="color: #E2E8F0; font-size: 0.8rem; font-weight: bold; margin:0;">since October 7th 2023</p>
+    </div>
+    <ul id="widget-victim-list" style="list-style: none; padding: 10px; margin: 0; height: calc(100% - 105px); overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;"></ul>
+    <style>#gaza-memorial-widget-container ::-webkit-scrollbar { display: none; }</style>
+    <footer style="font-size: 0.65rem; text-align: center; padding: 5px; border-top: 1px solid #475569; /* slate-600 */ position: absolute; bottom: 0; left:0; right:0; background-color: #334155; /* slate-700 */">
+        <p>Data sourced from <a href="https://data.techforpalestine.org/docs/killed-in-gaza/" target="_blank" rel="noopener noreferrer" style="color: #60A5FA; text-decoration: underline;">Tech For Palestine API</a></p>
+        <p id="widget-last-updated" style="font-weight: bold;">Data last updated: Loading...</p>
+    </footer>
+</div>
+<script>
+    (function() {
+        const victimList_widget = document.getElementById('widget-victim-list');
+        const lastUpdatedEl_widget = document.getElementById('widget-last-updated');
+        let allVictimsFlatList_widget = [];
+        let overallVictimIndex_widget = 0;
+        let itemAddInterval_widget = 3000; 
+        let nextBatchToFetch_HighestPage_widget = 0;
+        let isFetchingNextBatch_widget = false;
+        const PAGES_PER_BATCH_widget = 200; 
+        const BACKGROUND_FETCH_THRESHOLD_widget = 20; 
+
+        function shuffleArray_widget(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        async function determineTotalPages_widget_internal() { 
+            let low = 1, high = 500, lastKnownGoodPage = 0; 
+            const baseApiUrl = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
+            while (low <= high) {
+                let mid = Math.floor(low + (high - low) / 2); if (mid === 0) mid = 1;
+                try {
+                    const r = await fetch(baseApiUrl + mid + '.json');
+                    if (r.status === 404) high = mid - 1;
+                    else if (!r.ok) high = mid - 1;
+                    else { const d = await r.json(); if (Array.isArray(d) && d.length > 0) { lastKnownGoodPage = mid; low = mid + 1; } else high = mid - 1; }
+                } catch (e) { high = mid - 1; }
+            }
+            return lastKnownGoodPage;
+        }
+
+        async function fetchSinglePageData_widget_internal(pageNum) { 
+            const apiUrl = \`https://data.techforpalestine.org/api/v2/killed-in-gaza/page-\${pageNum}.json\`;
+            try {
+                const r = await fetch(apiUrl); if (!r.ok) return null;
+                const d = await r.json(); return Array.isArray(d) ? d : null;
+            } catch (e) { return null; }
+        }
+
+        async function tryFetchAndProcessBatch_widget_internal() { 
+            if (isFetchingNextBatch_widget || nextBatchToFetch_HighestPage_widget < 1) return false;
+            isFetchingNextBatch_widget = true;
+            const targetHigh = nextBatchToFetch_HighestPage_widget;
+            const startPage = Math.max(1, targetHigh - PAGES_PER_BATCH_widget + 1);
+            let batchData = [];
+            for (let p = targetHigh; p >= startPage; p--) {
+                const content = await fetchSinglePageData_widget_internal(p);
+                if (content) batchData.push(...content);
+            }
+            if (batchData.length > 0) {
+                allVictimsFlatList_widget.push(...batchData);
+                shuffleArray_widget(allVictimsFlatList_widget);
+                nextBatchToFetch_HighestPage_widget = startPage - 1;
+            } else {
+                nextBatchToFetch_HighestPage_widget = startPage - 1;
+            }
+            isFetchingNextBatch_widget = false;
+            return batchData.length > 0;
+        }
+        
+        async function fetchInitialWidgetData() {
+            const totalPages = await determineTotalPages_widget_internal();
+            if (totalPages > 0) {
+                nextBatchToFetch_HighestPage_widget = totalPages;
+                await tryFetchAndProcessBatch_widget_internal();
+            }
+            if (allVictimsFlatList_widget.length > 0) scheduleNextVictimAddition_widget();
+            else if (victimList_widget) victimList_widget.innerHTML = '<li style="color: #9CA3AF; text-align:center; padding: 10px;">No data available.</li>';
+        }
+
+        async function fetchWidgetTimestamp() {
+            try {
+                const r = await fetch('https://data.techforpalestine.org/api/v3/summary.json');
+                if (!r.ok) { lastUpdatedEl_widget.textContent = 'Data last updated: Error'; return; }
+                const d = await r.json();
+                if (d && d.gaza && d.gaza.last_update) lastUpdatedEl_widget.textContent = 'Data last updated: ' + d.gaza.last_update;
+                else lastUpdatedEl_widget.textContent = 'Data last updated: N/A';
+            } catch (e) { lastUpdatedEl_widget.textContent = 'Data last updated: Error'; }
+        }
+
+        let itemAddTimeoutId_widget = null;
+        function scheduleNextVictimAddition_widget() {
+            clearTimeout(itemAddTimeoutId_widget);
+            const itemsRemaining = allVictimsFlatList_widget.length - overallVictimIndex_widget;
+            if (!isFetchingNextBatch_widget && itemsRemaining < BACKGROUND_FETCH_THRESHOLD_widget && overallVictimIndex_widget > 0 && nextBatchToFetch_HighestPage_widget >= 1) {
+                tryFetchAndProcessBatch_widget_internal();
+            }
+            if (overallVictimIndex_widget < allVictimsFlatList_widget.length) {
+                displayNextVictim_widget();
+                itemAddTimeoutId_widget = setTimeout(scheduleNextVictimAddition_widget, itemAddInterval_widget);
+            } else if (victimList_widget.children.length === 0 && nextBatchToFetch_HighestPage_widget < 1 && !isFetchingNextBatch_widget) {
+                 console.log("Widget: All names displayed and no more pages.");
+            } else {
+                itemAddTimeoutId_widget = setTimeout(scheduleNextVictimAddition_widget, itemAddInterval_widget); 
+            }
+        }
+
+        function displayNextVictim_widget() {
+            if (overallVictimIndex_widget >= allVictimsFlatList_widget.length) return;
+            const victim = allVictimsFlatList_widget[overallVictimIndex_widget];
+            const li = document.createElement('li');
+            li.style.padding = '8px';
+            li.style.borderBottom = '1px solid #475569'; 
+            li.style.backgroundColor = '#1E293B'; 
+            li.style.borderRadius = '4px';
+            li.style.marginBottom = '6px';
+            li.style.opacity = '0';
+            li.style.transform = 'translateY(10px)';
+            li.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+
+            const enName = victim.en_name || "";
+            const arName = victim.name || "";
+            let nameDisplay = "";
+            if (enName && arName) nameDisplay = enName + " / " + arName;
+            else if (enName) nameDisplay = enName;
+            else if (arName) nameDisplay = arName;
+            else nameDisplay = "Name not available";
+            
+            let details = [];
+            if (victim.age !== null && victim.age !== undefined && String(victim.age).trim() !== "") {
+                details.push(victim.age + " years old");
+            }
+            if (victim.sex) {
+                const sexLower = String(victim.sex).toLowerCase();
+                if (sexLower === "male" || sexLower === "m") details.push("Male");
+                else if (sexLower === "female" || sexLower === "f") details.push("Female");
+            }
+            if (victim.dob && String(victim.dob).trim() !== "") {
+                 details.push("Born: " + victim.dob.trim());
+            }
+
+            li.innerHTML = \`<p style="font-weight: 600; color: #F87171; font-size:0.9rem; margin-bottom:2px;">\${nameDisplay}</p>
+                            \${details.length > 0 ? \`<p style="font-size: 0.75rem; color: #9CA3AF;">\${details.join(', ')}</p>\` : ''}\`;
+            
+            victimList_widget.prepend(li); 
+            void li.offsetWidth; 
+            li.style.opacity = '1';
+            li.style.transform = 'translateY(0)';
+            victimList_widget.scrollTop = 0; 
+            if (victimList_widget.children.length > 30) { 
+                victimList_widget.removeChild(victimList_widget.lastChild);
+            }
+            overallVictimIndex_widget++;
+        }
+        fetchInitialWidgetData();
+        fetchWidgetTimestamp();
+    })();
+<\/script>`; 
+            return widgetHtml.trim();
+        }
+
+        function openEmbedModal() {
+            if (embedCodeTextarea) {
+                embedCodeTextarea.value = generateEmbedCode();
+            }
+            if (embedModalBackdrop) {
+                embedModalBackdrop.style.display = 'flex';
+            }
+        }
+
+        function closeEmbedModal() {
+            if (embedModalBackdrop) {
+                embedModalBackdrop.style.display = 'none';
+            }
+        }
+
+        function copyEmbedCode() {
+            if (embedCodeTextarea) {
+                embedCodeTextarea.select();
+                embedCodeTextarea.setSelectionRange(0, 99999); 
+                try {
+                    const successful = document.execCommand('copy');
+                    const msg = successful ? 'Copied to clipboard!' : 'Copying failed.';
+                    showAppMessage(msg, successful ? 'success' : 'error', 2000);
+                    if (successful) {
+                        copyEmbedCodeButton.textContent = 'Copied!';
+                        setTimeout(() => { copyEmbedCodeButton.textContent = 'Copy Code'; }, 2000);
+                    }
+                } catch (err) {
+                    showAppMessage('Oops, unable to copy!', 'error', 2000);
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+            }
+        }
+
+        // Download Modal Logic
+        function openDownloadModal() {
+            if(downloadModalBackdrop) downloadModalBackdrop.style.display = 'flex';
+        }
+        function closeDownloadModal() {
+            if(downloadModalBackdrop) downloadModalBackdrop.style.display = 'none';
+        }
+        async function downloadAppFile() {
+            showAppMessage('Preparing offline version, this may take a moment...', 'info', 5000); 
+            
+            let fullDataset = [];
+            let lastUpdateTimestamp = "N/A";
+            const baseApiUrl = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
+            let totalPagesForDownload = 0;
+
+            try { // Outer try for the entire download preparation
+                // Determine total pages for download
+                let low = 1, high = 1000, lastGood = 0; 
+                const baseApiUrlForDownload = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
+                
+                let pageCheck_dl = 1; 
+                let stillChecking_dl = true; 
+                const MAX_PAGES_CHECK_DOWNLOAD_dl = 1000; 
+
+                while(stillChecking_dl && pageCheck_dl <= MAX_PAGES_CHECK_DOWNLOAD_dl) {
+                    try { // Inner try for each page check fetch
+                        const r = await fetch(baseApiUrlForDownload + pageCheck_dl + '.json');
+                        if(r.status === 404) {
+                            lastGood = pageCheck_dl - 1;
+                            stillChecking_dl = false;
+                        } else if (!r.ok) {
+                            lastGood = pageCheck_dl -1; 
+                            stillChecking_dl = false;
+                        } else { 
+                            const d = await r.json(); 
+                            if(Array.isArray(d) && d.length > 0) {
+                                lastGood = pageCheck_dl;
+                                pageCheck_dl++;
+                            } else { 
+                                lastGood = pageCheck_dl - 1;
+                                stillChecking_dl = false;
+                            }
+                        }
+                    } catch (e) { // Catch for inner try (page check fetch)
+                        console.warn(`Offline Download (total page check): Error checking page ${pageCheck_dl}:`, e);
+                        lastGood = pageCheck_dl - 1; 
+                        stillChecking_dl = false; 
+                    }
+                }
+                totalPagesForDownload = lastGood;
+                console.log("Offline Download: Total pages to fetch:", totalPagesForDownload);
+
+                if (totalPagesForDownload > 0) {
+                    for (let p = 1; p <= totalPagesForDownload; p++) { 
+                        console.log(`Offline Download: Fetching page ${p}`);
+                        try { // Inner try for robustness of fetching each page
+                            const response = await fetch(baseApiUrl + p + '.json');
+                            if (response.ok) {
+                                const pageData = await response.json();
+                                if (Array.isArray(pageData)) {
+                                    fullDataset.push(...pageData);
+                                }
+                            } else {
+                                 console.warn(`Offline Download: Failed to fetch page ${p}`);
+                            }
+                        } catch (e) {
+                             console.warn(`Offline Download: Error fetching page ${p}:`, e);
+                        }
+                    }
+                }
+                console.log("Offline Download: Total records fetched for offline:", fullDataset.length);
+
+                try { // Inner try for summary fetch
+                    const summaryResponse = await fetch('https://data.techforpalestine.org/api/v3/summary.json');
+                    if (summaryResponse.ok) {
+                        const summaryData = await summaryResponse.json();
+                        if (summaryData && summaryData.gaza && summaryData.gaza.last_update) {
+                            lastUpdateTimestamp = summaryData.gaza.last_update;
+                        }
+                    }
+                } catch(e) {
+                    console.warn("Offline Download: Error fetching summary for timestamp:", e);
+                }
+                
+                const pageTitle = document.title;
+                const pageStyles = Array.from(document.styleSheets)
+                    .map(sheet => {
+                        try {
+                            return Array.from(sheet.cssRules)
+                                .map(rule => rule.cssText)
+                                .join('\n');
+                        } catch (e) {
+                            console.warn("Could not read CSS rules from stylesheet:", sheet.href, e);
+                            return '';
+                        }
+                    })
+                    .filter(Boolean)
+                    .join('\n');
+
+                const offlineHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageTitle} (Offline)</title>
+    <style>
+        ${pageStyles}
+        /* Ensure FABs are hidden in offline version */
+        #embed-button, #download-button { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col items-center min-h-screen">
+    <div id="parallax-background">
+        <div class="parallax-layer" id="parallax-layer-1"></div>
+        <div class="parallax-layer" id="parallax-layer-2"></div>
+        <div class="parallax-layer" id="parallax-layer-3"></div>
+        <div class="parallax-layer" id="parallax-layer-4"></div>
+        <div class="parallax-layer" id="parallax-layer-5"></div>
+        <div class="parallax-layer" id="parallax-layer-6"></div>
+        <div id="parallax-overlay"></div> 
+    </div>
+    <div id="app-container" class="w-full max-w-3xl mx-auto flex flex-col h-full flex-grow relative z-10 p-2 sm:p-4">
+        ${document.querySelector('header').outerHTML}
+        <main id="victims-area" class="flex-grow p-3 sm:p-6 rounded-lg bg-slate-700 border border-slate-600 shadow-xl h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] min-h-[250px] sm:min-h-[300px]">
+            <ul id="victim-list" class="space-y-3"></ul>
+        </main>
+        <div id="message-box-container" style="transition: opacity 0.5s ease-in-out; opacity: 0; display: none; position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); z-index: 1050;"></div>
+        <footer id="app-footer" class="mt-6 pt-3 pb-4 text-center text-xs text-gray-300"> 
+            <div class="footer-content-wrapper inline-block p-3 bg-slate-700 rounded-lg shadow-md border border-slate-600"> 
+                <p>Data sourced from <a href="https://data.techforpalestine.org/docs/killed-in-gaza/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">Tech For Palestine - Killed in Gaza API</a>.</p>
+                <p class="mt-1 data-last-updated-text font-bold">Data last updated: ${lastUpdateTimestamp}</p>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // --- Minimal Offline Script ---
+        const embeddedVictimData = ${JSON.stringify(fullDataset)};
+        // const embeddedLastUpdate = "${lastUpdateTimestamp}"; // Already used above in HTML
+
+        let allVictimsFlatList_offline = []; 
+        let overallVictimIndex_offline = 0;  
+        const normalItemAddIntervalMs_offline = 2500; 
+        const fastItemAddIntervalMs_offline = 300;   
+        let currentItemAddIntervalMs_offline = normalItemAddIntervalMs_offline; 
+        const normalScrollSpeedPxPerSecond_offline = 20; 
+        const fastScrollSpeedPxPerSecond_offline = 100; 
+        let currentTranslationY_offline = 0; 
+        let lastTimestamp_offline = 0;       
+        let itemAddTimeoutId_offline = null; 
+        let animationFrameId_offline = null; 
+        let isDataLoaded_offline = false;
+        let isSpaceBarDown_offline = false; 
+
+        const victimListUl_offline = document.getElementById('victim-list');
+        const messageBoxContainer_offline = document.getElementById('message-box-container'); 
+
+        function shuffleArray_offline(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function displayVictim_offline(victim) {
+            const li = document.createElement('li');
+            li.className = 'victim-item p-3 bg-slate-800 rounded-md shadow'; 
+            const enName = victim.en_name || "";
+            const arName = victim.name || "";
+            let combinedNameStr = "";
+            if (enName && arName) combinedNameStr = \`\${enName} / \${arName}\`;
+            else if (enName) combinedNameStr = enName;
+            else if (arName) combinedNameStr = arName;
+            else combinedNameStr = "Name not available";
+            let detailsParts = [];
+            if (victim.age !== null && victim.age !== undefined && String(victim.age).trim() !== "") {
+                detailsParts.push(\`\${victim.age} years old\`);
+            }
+            if (victim.sex) {
+                const sexLower = String(victim.sex).toLowerCase();
+                if (sexLower === "male" || sexLower === "m") detailsParts.push("Male");
+                else if (sexLower === "female" || sexLower === "f") detailsParts.push("Female");
+            }
+            if (victim.dob && typeof victim.dob === 'string' && victim.dob.trim() !== "") {
+                 if (/^\\d{4}-\\d{2}-\\d{2}$/.test(victim.dob.trim())) detailsParts.push(\`Born: \${victim.dob.trim()}\`);
+                 else { 
+                    detailsParts.push(\`Born: \${victim.dob.trim()}\`); 
+                 }
+            }
+            const detailsString = detailsParts.join(', ');
+            li.innerHTML = \`
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="flex-grow mb-1 sm:mb-0">
+                        <p class="font-semibold text-base sm:text-lg text-red-300">\${combinedNameStr}</p>
+                        \${detailsString ? \`<p class="text-xs sm:text-sm text-gray-300">\${detailsString}</p>\` : ''}
+                    </div>
+                </div>\`;
+            const previousScrollHeight = victimListUl_offline.scrollHeight;
+            victimListUl_offline.prepend(li); 
+            li.offsetHeight; 
+            const newScrollHeight = victimListUl_offline.scrollHeight;
+            const heightAddedByNewItem = newScrollHeight - previousScrollHeight;
+            currentTranslationY_offline -= heightAddedByNewItem;
+            victimListUl_offline.style.transform = \`translateY(\${currentTranslationY_offline}px)\`;
+            requestAnimationFrame(() => { requestAnimationFrame(() => { li.classList.add('revealed'); }); });
+        }
+
+        function scheduleNextVictimAddition_offline() {
+            clearTimeout(itemAddTimeoutId_offline); 
+            if (overallVictimIndex_offline < allVictimsFlatList_offline.length) {
+                const victim = allVictimsFlatList_offline[overallVictimIndex_offline];
+                displayVictim_offline(victim);
+                overallVictimIndex_offline++;
+                itemAddTimeoutId_offline = setTimeout(() => scheduleNextVictimAddition_offline(isSpaceBarDown_offline), currentItemAddIntervalMs_offline);
+            } else if (victimListUl_offline.children.length === 0) {
+                console.log("Offline: All records processed and scrolled off.");
+                if (animationFrameId_offline) { cancelAnimationFrame(animationFrameId_offline); animationFrameId_offline = null; }
+            } else {
+                 itemAddTimeoutId_offline = setTimeout(() => scheduleNextVictimAddition_offline(isSpaceBarDown_offline), currentItemAddIntervalMs_offline);
+            }
+        }
+
+        function animateStream_offline(timestamp) {
+            if (!isDataLoaded_offline && victimListUl_offline.children.length === 0) { 
+                animationFrameId_offline = requestAnimationFrame(animateStream_offline); return;
+            }
+            if (lastTimestamp_offline === 0) lastTimestamp_offline = timestamp;
+            const deltaTime = (timestamp - lastTimestamp_offline) / 1000; 
+            lastTimestamp_offline = timestamp;
+            const currentScrollSpeed = isSpaceBarDown_offline ? fastScrollSpeedPxPerSecond : normalScrollSpeedPxPerSecond;
+            if (victimListUl_offline.children.length > 0 || overallVictimIndex_offline < allVictimsFlatList_offline.length) {
+                 currentTranslationY_offline += currentScrollSpeed * deltaTime;
+            }
+            victimListUl_offline.style.transform = \`translateY(\${currentTranslationY_offline}px)\`;
+            const listItems = victimListUl_offline.children;
+            if (listItems.length > 0) {
+                const lastItem = listItems[listItems.length - 1];
+                const itemVisualTop = lastItem.offsetTop + currentTranslationY_offline; 
+                if (itemVisualTop > victimListUl_offline.clientHeight) victimListUl_offline.removeChild(lastItem);
+            }
+            if (overallVictimIndex_offline >= allVictimsFlatList_offline.length && victimListUl_offline.children.length === 0) {
+                 if (animationFrameId_offline) { 
+                    console.log("Offline Animation stopped: All items displayed and scrolled off.");
+                    cancelAnimationFrame(animationFrameId_offline); animationFrameId_offline = null;
+                    if(itemAddTimeoutId_offline) clearTimeout(itemAddTimeoutId_offline);
+                }
+                return; 
+            }
+            animationFrameId_offline = requestAnimationFrame(animateStream_offline);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            allVictimsFlatList_offline = embeddedVictimData;
+            shuffleArray_offline(allVictimsFlatList_offline);
+            isDataLoaded_offline = true;
+            if (allVictimsFlatList_offline.length > 0) {
+                scheduleNextVictimAddition_offline();
+                animationFrameId_offline = requestAnimationFrame(animateStream_offline);
+            } else {
+                victimListUl_offline.innerHTML = '<li>No data embedded for offline view.</li>';
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.code === 'Space') {
+                    e.preventDefault();
+                    if (!isSpaceBarDown_offline) {
+                        isSpaceBarDown_offline = true;
+                        currentItemAddIntervalMs_offline = fastItemAddIntervalMs_offline;
+                    }
+                }
+            });
+            document.addEventListener('keyup', (e) => {
+                 if (e.key === ' ' || e.code === 'Space') {
+                    e.preventDefault();
+                    if (isSpaceBarDown_offline) {
+                        isSpaceBarDown_offline = false;
+                        currentItemAddIntervalMs_offline = normalItemAddIntervalMs_offline;
+                    }
+                }
+            });
+        });
+    <\/script> 
+</body>
+</html>`;
+
+                const blob = new Blob([offlineHtml], { type: 'text/html' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'gaza_memorial_offline.html';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(link.href);
+                showAppMessage('Offline app file download initiated!', 'success', 3000);
+                closeDownloadModal();
+            } catch (error) { // Catch for the outer try block of downloadAppFile
+                console.error("Error generating or downloading app file:", error);
+                showAppMessage('Error preparing download.', 'error', 3000);
+            } finally {
+                if(loadingText) loadingText.textContent = ""; 
+                if(loadingIndicator) loadingIndicator.style.display = 'none';
+            }
+        }
+
 
         let messageTimeoutId = null;
         function showAppMessage(text, type = 'info', duration = null) {
