@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             position: relative; 
-            background-color: #111827; /* bg-gray-900 */
+            background-color: #111827; 
         }
         .victim-item {
             opacity: 0;
@@ -35,7 +35,6 @@
             z-index: 1; 
         }
 
-        /* Animated Background Styles */
         #parallax-background {
             position: fixed;
             top: 0;
@@ -117,10 +116,9 @@
             z-index: 20; 
         }
 
-        /* Floating Action Button Styles */
         .fab-button {
             position: fixed;
-            background-color: #4A5568; /* bg-gray-600 */
+            background-color: #4A5568; 
             color: white;
             width: 50px;
             height: 50px;
@@ -134,7 +132,7 @@
             transition: background-color 0.2s;
         }
         .fab-button:hover {
-            background-color: #2D3748; /* bg-gray-700 */
+            background-color: #2D3748; 
         }
         .fab-button svg {
             width: 24px;
@@ -145,16 +143,14 @@
             right: 20px;
         }
         #download-button {
-            bottom: 80px; /* Position above embed button */
+            bottom: 80px; 
             right: 20px;
-            background-color: #38A169; /* Green for download */
+            background-color: #38A169; 
         }
         #download-button:hover {
-            background-color: #2F855A; /* Darker green */
+            background-color: #2F855A; 
         }
 
-
-        /* Modal Styles (Shared for Embed and Download) */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -162,31 +158,31 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.6);
-            display: none; /* Hidden by default */
+            display: none; 
             align-items: center;
             justify-content: center;
             z-index: 10000;
         }
         .modal-content {
-            background-color: #2D3748; /* bg-gray-700 */
+            background-color: #2D3748; 
             padding: 24px;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 600px;
-            color: #E2E8F0; /* text-gray-200 */
+            color: #E2E8F0; 
         }
         .modal-content h3 {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 600; /* font-semibold */
+            font-size: 1.25rem; 
+            font-weight: 600; 
             margin-bottom: 16px;
         }
         .modal-content textarea {
             width: 100%;
             min-height: 150px; 
-            background-color: #1A202C; /* bg-gray-800 */
-            color: #CBD5E0; /* text-gray-300 */
-            border: 1px solid #4A5568; /* border-gray-600 */
+            background-color: #1A202C; 
+            color: #CBD5E0; 
+            border: 1px solid #4A5568; 
             border-radius: 6px;
             padding: 10px;
             font-family: monospace;
@@ -203,34 +199,34 @@
         .modal-button {
             padding: 8px 16px;
             border-radius: 6px;
-            font-weight: 500; /* font-medium */
+            font-weight: 500; 
             cursor: pointer;
             transition: background-color 0.2s;
         }
         .modal-button-primary {
-            background-color: #3B82F6; /* bg-blue-500 */
+            background-color: #3B82F6; 
             color: white;
         }
         .modal-button-primary:hover {
-            background-color: #2563EB; /* bg-blue-600 */
+            background-color: #2563EB; 
         }
          .modal-button-download { 
-            background-color: #38A169; /* Green */
+            background-color: #38A169; 
             color: white;
         }
         .modal-button-download:hover {
-            background-color: #2F855A; /* Darker green */
+            background-color: #2F855A; 
         }
         .modal-button-secondary {
-            background-color: #4A5568; /* bg-gray-600 */
+            background-color: #4A5568; 
             color: white;
         }
         .modal-button-secondary:hover {
-            background-color: #2D3748; /* bg-gray-700 */
+            background-color: #2D3748; 
         }
         .modal-instructions {
-            font-size: 0.875rem; /* text-sm */
-            color: #A0AEC0; /* text-gray-400 */
+            font-size: 0.875rem; 
+            color: #A0AEC0; 
             margin-bottom: 12px;
         }
         .modal-instructions ol {
@@ -241,16 +237,15 @@
             margin-bottom: 6px;
         }
 
-        /* Page Load Fade-in Overlay */
         #page-load-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000; /* Black */
+            background-color: #000000; 
             opacity: 1;
-            z-index: 100000; /* Highest z-index */
+            z-index: 100000; 
             pointer-events: all; 
             transition: opacity 2.5s ease-out; 
         }
@@ -274,45 +269,42 @@
         <div id="parallax-overlay"></div> 
     </div>
 
-    <div id="app-container" class="w-full max-w-3xl mx-auto flex flex-col h-full flex-grow relative z-10 p-2 sm:p-4">
-        <header class="text-center py-4 sm:py-6">
+    <div id="app-container" class="w-full max-w-3xl mx-auto flex flex-col h-screen p-2 sm:p-4 relative z-10">
+        <header class="text-center py-4 sm:py-6 flex-shrink-0"> 
             <h1 class="text-5xl sm:text-6xl font-bold text-white filter drop-shadow">KILLED IN GAZA</h1>
             <p class="text-xl sm:text-2xl text-white font-bold mt-1 filter drop-shadow-sm">since October 7th 2023</p>
         </header>
 
-        <div id="loading-indicator" class="text-center p-6 bg-slate-700 border border-slate-600 rounded-lg shadow-xl flex flex-col justify-center items-center my-auto">
+        <div id="loading-indicator" class="text-center p-6 bg-slate-700 border border-slate-600 rounded-lg shadow-2xl flex flex-col justify-center items-center flex-1"> 
             <p id="loading-text" class="text-lg sm:text-xl text-gray-100">Loading names...</p> 
             <div class="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-t-2 border-gray-100 mx-auto mt-4"></div>
         </div>
 
-        <main id="victims-area" class="flex-grow p-3 sm:p-6 rounded-lg bg-slate-700 border border-slate-600 shadow-xl h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] min-h-[250px] sm:min-h-[300px]" style="display:none;">
+        <main id="victims-area" class="flex-1 p-3 sm:p-6 rounded-lg bg-slate-700 border border-slate-600 shadow-2xl overflow-y-auto" style="display:none;">
             <ul id="victim-list" class="space-y-3"></ul>
         </main>
 
         <div id="message-box-container"></div>
        
-        <footer id="app-footer" class="mt-6 pt-3 pb-4 text-center text-xs text-gray-300"> 
+        <footer id="app-footer" class="mt-auto pt-3 pb-4 text-center text-xs text-gray-300 flex-shrink-0"> 
             <div class="footer-content-wrapper inline-block p-3 bg-slate-700 rounded-lg shadow-md border border-slate-600"> 
                 <p>Data sourced from <a href="https://data.techforpalestine.org/docs/killed-in-gaza/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">Tech For Palestine - Killed in Gaza API</a>.</p>
             </div>
         </footer>
     </div>
 
-    {/* Embed Button */}
     <button id="embed-button" class="fab-button" title="Embed Widget">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
         </svg>          
     </button>
 
-    {/* Download Button */}
     <button id="download-button" class="fab-button" title="Download for Offline Use">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
         </svg>
     </button>
 
-    {/* Embed Modal */}
     <div id="embed-modal-backdrop" class="modal-backdrop">
         <div id="embed-modal-content" class="modal-content"> 
             <h3>Embed This Memorial Stream</h3>
@@ -325,7 +317,6 @@
         </div>
     </div>
 
-    {/* Download Modal */}
     <div id="download-modal-backdrop" class="modal-backdrop">
         <div id="download-modal-content" class="modal-content"> 
             <h3>Download for Offline Use</h3>
@@ -347,7 +338,7 @@
     </div>
     
     <script>
-        console.log("Script started (Live Data - Delayed Page Load Fade-In Version).");
+        console.log("Script started (Live Data - Cleaned CSS Version).");
         
         let allVictimsFlatList = []; 
         let overallVictimIndex = 0;  
@@ -392,12 +383,10 @@
             if (loadingText) loadingText.textContent = "Loading names..."; 
             
             if (pageLoadOverlay) {
-                setTimeout(() => { // Start fading out after 2 seconds
+                setTimeout(() => { 
                     pageLoadOverlay.classList.add('fade-out');
-                    setTimeout(() => { // Remove from DOM after transition (2s delay + 2.5s transition)
-                         pageLoadOverlay.style.display = 'none'; 
-                    }, 2500); 
-                }, 2000); // 2-second delay before fade starts
+                    setTimeout(() => { pageLoadOverlay.style.display = 'none'; }, 2500); 
+                }, 2000); 
             }
 
             setupEventListeners();
@@ -551,7 +540,6 @@
         async function fetchSinglePageData(pageNumber) {
             const apiUrl = `https://data.techforpalestine.org/api/v2/killed-in-gaza/page-${pageNumber}.json`;
             console.log(`fetchSinglePageData: Fetching from ${apiUrl}`);
-            // if(loadingText) loadingText.textContent = `Loading names...`; // Keep general
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
@@ -613,7 +601,6 @@
             }
             nextBatchToFetch_HighestPage = totalPages; 
             const initialBatchSuccess = await tryFetchAndProcessBatch(); 
-            // if (loadingText) loadingText.textContent = "Processing data..."; // Keep "Loading names..."
             
             loadingIndicator.style.display = 'none'; 
             if (initialBatchSuccess && allVictimsFlatList.length > 0) {
@@ -634,7 +621,7 @@
             if (isDataLoaded && !isFetchingNextBatch && itemsRemainingInQueue < BACKGROUND_FETCH_THRESHOLD && overallVictimIndex > 0 && nextBatchToFetch_HighestPage >= 1 ) {
                 console.log(`Nearing end of current data buffer. Attempting to fetch next batch (pages ending around ${nextBatchToFetch_HighestPage}).`);
                 if(loadingText && loadingIndicator.style.display === 'none') { 
-                    loadingText.textContent = "Loading names..."; // Keep general text
+                    loadingText.textContent = "Loading names..."; 
                     loadingIndicator.style.display = 'flex'; 
                 }
                 tryFetchAndProcessBatch().then(success => {
