@@ -35,32 +35,6 @@
             z-index: 1; 
         }
 
-        #victims-area::before { 
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0; 
-            width: 100%;
-            height: 60px; 
-            background: linear-gradient(to bottom, rgba(17, 24, 39, 1) 20%, rgba(17, 24, 39, 0) 100%);
-            z-index: 10; 
-            pointer-events: none; 
-        }
-
-        #victims-area::after { 
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0; 
-            width: 100%;
-            height: 60px; 
-            background: linear-gradient(to top, rgba(17, 24, 39, 1) 20%, rgba(17, 24, 39, 0) 100%);
-            z-index: 10; 
-            pointer-events: none;
-        }
-
         /* Animated Background Styles */
         #parallax-background {
             position: fixed;
@@ -373,7 +347,7 @@
     </div>
     
     <script>
-        console.log("Script started (Live Data - With Embed & Download Feature - Syntax Fix).");
+        console.log("Script started (Live Data - Delayed Page Load Fade-In Version).");
         
         let allVictimsFlatList = []; 
         let overallVictimIndex = 0;  
@@ -418,10 +392,12 @@
             if (loadingText) loadingText.textContent = "Loading names..."; 
             
             if (pageLoadOverlay) {
-                setTimeout(() => {
+                setTimeout(() => { // Start fading out after 2 seconds
                     pageLoadOverlay.classList.add('fade-out');
-                    setTimeout(() => { pageLoadOverlay.style.display = 'none'; }, 2500); 
-                }, 500); 
+                    setTimeout(() => { // Remove from DOM after transition (2s delay + 2.5s transition)
+                         pageLoadOverlay.style.display = 'none'; 
+                    }, 2500); 
+                }, 2000); // 2-second delay before fade starts
             }
 
             setupEventListeners();
@@ -541,14 +517,13 @@
             }
         }
 
-        // Main app's data fetching functions
         async function determineTotalPages() {
             let low = 1;
             let high = 1000; 
             let lastKnownGoodPage = 0;
             const baseApiUrl = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
             console.log(`determineTotalPages: Starting binary search for total pages between ${low} and ${high}.`);
-            if(loadingText) loadingText.textContent = "Determining total pages...";
+            if(loadingText) loadingText.textContent = "Loading names..."; 
             while (low <= high) {
                 let mid = Math.floor(low + (high - low) / 2); 
                 if (mid === 0) mid = 1;
@@ -576,7 +551,7 @@
         async function fetchSinglePageData(pageNumber) {
             const apiUrl = `https://data.techforpalestine.org/api/v2/killed-in-gaza/page-${pageNumber}.json`;
             console.log(`fetchSinglePageData: Fetching from ${apiUrl}`);
-            if(loadingText) loadingText.textContent = `Loading names (page ${pageNumber})...`;
+            // if(loadingText) loadingText.textContent = `Loading names...`; // Keep general
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) {
@@ -638,7 +613,7 @@
             }
             nextBatchToFetch_HighestPage = totalPages; 
             const initialBatchSuccess = await tryFetchAndProcessBatch(); 
-            if (loadingText) loadingText.textContent = "Processing data...";
+            // if (loadingText) loadingText.textContent = "Processing data..."; // Keep "Loading names..."
             
             loadingIndicator.style.display = 'none'; 
             if (initialBatchSuccess && allVictimsFlatList.length > 0) {
@@ -659,11 +634,11 @@
             if (isDataLoaded && !isFetchingNextBatch && itemsRemainingInQueue < BACKGROUND_FETCH_THRESHOLD && overallVictimIndex > 0 && nextBatchToFetch_HighestPage >= 1 ) {
                 console.log(`Nearing end of current data buffer. Attempting to fetch next batch (pages ending around ${nextBatchToFetch_HighestPage}).`);
                 if(loadingText && loadingIndicator.style.display === 'none') { 
-                    loadingText.textContent = "Loading more names...";
+                    loadingText.textContent = "Loading names..."; // Keep general text
                     loadingIndicator.style.display = 'flex'; 
                 }
                 tryFetchAndProcessBatch().then(success => {
-                    if (loadingIndicator.style.display === 'flex' && loadingText.textContent === "Loading more names...") { 
+                    if (loadingIndicator.style.display === 'flex' && loadingText.textContent === "Loading names...") { 
                         loadingIndicator.style.display = 'none'; 
                     }
                 }); 
@@ -974,8 +949,7 @@
             const baseApiUrl = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
             let totalPagesForDownload = 0;
 
-            try { // Outer try for the entire download preparation
-                // Determine total pages for download
+            try { 
                 let low = 1, high = 1000, lastGood = 0; 
                 const baseApiUrlForDownload = 'https://data.techforpalestine.org/api/v2/killed-in-gaza/page-';
                 
@@ -984,7 +958,7 @@
                 const MAX_PAGES_CHECK_DOWNLOAD_dl = 1000; 
 
                 while(stillChecking_dl && pageCheck_dl <= MAX_PAGES_CHECK_DOWNLOAD_dl) {
-                    try { // Inner try for each page check fetch
+                    try { 
                         const r = await fetch(baseApiUrlForDownload + pageCheck_dl + '.json');
                         if(r.status === 404) {
                             lastGood = pageCheck_dl - 1;
@@ -1002,7 +976,7 @@
                                 stillChecking_dl = false;
                             }
                         }
-                    } catch (e) { // Catch for inner try (page check fetch)
+                    } catch (e) { 
                         console.warn(`Offline Download (total page check): Error checking page ${pageCheck_dl}:`, e);
                         lastGood = pageCheck_dl - 1; 
                         stillChecking_dl = false; 
@@ -1014,7 +988,7 @@
                 if (totalPagesForDownload > 0) {
                     for (let p = 1; p <= totalPagesForDownload; p++) { 
                         console.log(`Offline Download: Fetching page ${p}`);
-                        try { // Inner try for robustness of fetching each page
+                        try { 
                             const response = await fetch(baseApiUrl + p + '.json');
                             if (response.ok) {
                                 const pageData = await response.json();
@@ -1031,7 +1005,7 @@
                 }
                 console.log("Offline Download: Total records fetched for offline:", fullDataset.length);
 
-                try { // Inner try for summary fetch
+                try { 
                     const summaryResponse = await fetch('https://data.techforpalestine.org/api/v3/summary.json');
                     if (summaryResponse.ok) {
                         const summaryData = await summaryResponse.json();
@@ -1067,7 +1041,6 @@
     <title>${pageTitle} (Offline)</title>
     <style>
         ${pageStyles}
-        /* Ensure FABs are hidden in offline version */
         #embed-button, #download-button { display: none !important; }
     </style>
 </head>
@@ -1097,7 +1070,6 @@
     <script>
         // --- Minimal Offline Script ---
         const embeddedVictimData = ${JSON.stringify(fullDataset)};
-        // const embeddedLastUpdate = "${lastUpdateTimestamp}"; // Already used above in HTML
 
         let allVictimsFlatList_offline = []; 
         let overallVictimIndex_offline = 0;  
