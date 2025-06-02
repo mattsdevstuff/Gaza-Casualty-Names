@@ -1,6 +1,5 @@
-# Gaza Casualties Memorial Stream
+# Gaza Genocide Casualties Memorial Stream
 
-## In Memory of the Lives Lost in Gaza Since October 7th, 2023
 
 This project is a web application designed to serve as a live, scrolling memorial for the confirmed casualties in Gaza since October 7th, 2023. It aims to present this sensitive data in a respectful and informative way, with a focus on the human cost of the genocide. This application can also serve as a powerful visual tool for events, vigils, educational settings, or public displays to help convey the scale of loss.
 **[https://mattsdevstuff.github.io/Gaza-Casualty-Names/]**
