@@ -9,13 +9,9 @@ This project is a web application designed to serve as a live, scrolling memoria
 * **Live Data Stream:** Displays names, ages, gender, and date of birth (where available) of victims, fetched in real-time.
 * **Continuous Scrolling Memorial:** Names appear and scroll upwards, creating a continuous stream.
 * **Dynamic Data Fetching:** Efficiently loads data in batches as needed, determining the total number of available data pages.
-* **Speed Control:** Users can press and hold the **Space Bar** to temporarily increase the speed of the name display and scrolling.
-* **Immersive Parallax Background:** Features a multi-layered, subtly animated parallax background of Gaza-inspired art to create a somber and reflective atmosphere.
 * **Embeddable Widget:** Provides a simple HTML/JS snippet to allow others to embed a lite version of the memorial stream on their own websites.
 * **Download for Offline Use:** Users can download the entire application as a single HTML file to view the memorial offline (data will be as of the last online fetch).
 * **Responsive Design:** Adapts to different screen sizes for accessibility on desktop and mobile devices.
-* **Clear Data Attribution:** Clearly sources data from the "Killed in Gaza API" by Tech For Palestine.
-* **Loading State & User Feedback:** Provides loading indicators and messages for data fetching and user actions.
 
 ## How It Works
 
@@ -80,11 +76,5 @@ No build process or complex dependencies are required for the main application.
 
 Contributions are welcome, especially those that enhance the respectful presentation of this data or improve accessibility. Please feel free to fork the repository, make your changes, and submit a pull request.
 
-When contributing, please ensure:
-* Changes are tested.
-* Code is well-commented, especially for complex logic.
-* The primary goal of respectful memorialization is maintained.
 
----
-
-We hope this project serves as a solemn reminder and a tool for awareness.
+Free Palestine
